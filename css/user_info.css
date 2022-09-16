@@ -1,0 +1,197 @@
+body{
+    margin: 0px;
+    background-color: white;
+}
+
+header{
+    height: 50px;
+}
+
+header:hover{
+    cursor: pointer;
+}
+
+main{
+    /* font-family: 'Frank Ruhl Libre', serif; */
+    /* font-family: 'Gothic A1', sans-serif; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 80vh;
+    max-height: fit-content;
+    min-height: 500px;
+    background-color: #ffe365;
+    /* background-color: #FFF9E6; */
+}
+
+img{
+    width: 70px;
+}
+
+header{
+    box-sizing: border-box;
+    font-family: 'Frank Ruhl Libre', serif;
+    font-weight: 600;
+    font-size: 16px;
+    padding: 14px 0 0 10px;
+}
+
+/* .info{
+    color: #333333;
+    font-family: 'Gothic A1', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+} */
+
+.signup_box{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    width: 300px;
+}
+
+.input_box{
+    display: flex;
+    font-family: 'Gothic A1', serif;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #444444;
+}
+
+.phone{
+    display: flex;
+}
+
+.phone input{
+    text-align: center;
+}
+
+.input{
+    width: 100%;
+    font-family: 'Gothic A1', serif;
+    border: none;
+    background-color: transparent;
+}
+
+button{
+    background-color: transparent;
+    width: 30px;
+    height: 30px;
+    border: none;
+}
+
+button img{
+    width: 100%;
+}
+
+button:hover{
+    cursor: pointer;
+}
+
+.btn_box{
+    margin: 20px 0 10px 0;
+    border: none;
+    background-color: white;
+}
+
+input[type="button"]{
+    width: 100%;
+    font-family: 'Frank Ruhl Libre', serif;
+    border: none;
+    color: #555555;
+    background-color: transparent;
+}
+
+input[type="button"]:hover{
+    cursor: pointer;
+    opacity: 50%;
+}
+
+input[type="button"]:focus{
+    outline: none;
+    opacity: 50%;
+}
+
+input[type="submit"]{
+    width: 100%;
+    font-family: 'Frank Ruhl Libre', serif;
+    border: none;
+    color: #555555;
+    background-color: transparent;
+}
+
+input[type="submit"]:hover{
+    cursor: pointer;
+    opacity: 50%;
+}
+
+input[type="submit"]:focus{
+    outline: none;
+    opacity: 50%;
+}
+
+input[type="text"]:focus{
+    outline: none;
+}
+
+input[type="password"]:focus{
+    outline: none;
+}
+
+input[type="email"]:focus{
+    outline: none;
+}
+
+input[type="tel"]:focus{
+    outline: none;
+}
+
+.sign_up{
+    display: inline-block;
+    width:19%;
+    text-align: left;
+}
+
+.find_info_box{
+    width: 100%;
+}
+
+.find_info{
+    display: inline-block;
+}
+
+a{
+    font-family: 'Gothic A1', serif;
+    font-size: 12px;
+    text-decoration: none;
+    color: #222222;
+}
+
+#sign_in{
+    display: none;
+}  
+
+footer{
+    padding-top: 50px;
+    text-align: center;
+    font-family: 'Frank Ruhl Libre', serif;
+    color:#555555;
+    font-size: 12px;
+}
+
+@media screen and (max-width:480px) {
+    signup_box{
+        height: fit-content;
+    }
+
+    footer{
+        padding-top: 10px;
+    }
+
+    button{
+        width: 40px;
+        height: 40px;
+    }
+}

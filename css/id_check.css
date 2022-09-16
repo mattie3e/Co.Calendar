@@ -1,0 +1,25 @@
+body{
+    box-sizing: border-box;
+    margin: 0;
+    width: 400px;
+    height: 250px;
+    text-align: center;
+    padding-top: 70px;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #ffe365;
+}
+
+input{
+    font-family: 'Segoe UI', sans-serif;
+    margin-top: 20px;
+    border: none;
+    background-color: white;
+    width: 50px;
+    height: 25px;
+    border-radius: 5px;
+}
+
+input:active{
+    position: relative;
+    top: 2px;
+}
