@@ -50,19 +50,20 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700&family=Gothic+A1:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../css/id_check.css">
-    <title></title>
+    <title>비밀번호 찾기</title>
 </head>
 <body>
-    <script>
+    <h2></h2>
+    <input type="button" onclick="window.close()" value="확인"></button>
+
+    <script>// 사용할 수 있으면 입력칸 막고 버튼 보여주기
         var check = <%=check%>
 
         if (check == 1){
-            alert("비밀번호를 찾을 수 없습니다. 입력한 정보를 확인해주세요.")
-            window.history.back()
+            document.getElementsByTagName('h2')[0].innerHTML = "비밀번호를 찾을 수 없습니다. 입력한 정보를 확인해주세요."
         }
         else if (check == 0){
-            alert("비밀번호는 " + "<%=pw%>" + "입니다.")
-            document.location.href = "../index.jsp"
+            document.getElementsByTagName('h2')[0].innerHTML = "비밀번호는 " + "<%=pw%>" + "입니다."
         }
     </script>
 </body>

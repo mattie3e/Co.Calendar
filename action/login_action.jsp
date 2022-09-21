@@ -18,7 +18,7 @@
     Connection connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/calendar", "tae", "1031"); 
 
     // SQL문 준비 작업
-    String sql = "SELECT id, pw, name FROM users WHERE id=?";
+    String sql = "SELECT id, pw, name, rank, team FROM users WHERE id=?";
     PreparedStatement query = connect.prepareStatement(sql);
     query.setString(1, idValue);
 
@@ -27,18 +27,25 @@
     String id = "";
     String pw = "";
     String name = "";
+    String rank = "";
+    String team = "";
 
     while(result.next()) {
         id = result.getString(1);
         pw = result.getString(2);
         name = result.getString(3);
+        rank = result.getString(4);
+        team = result.getString(5);
     }
     
     String check = "0";
     if (pw.equals(pwValue)){
         session.setAttribute("name", name);
         session.setAttribute("id", id);
-        // response.sendRedirect("../html/main.jsp");
+        session.setAttribute("rank", rank);
+        session.setAttribute("team", team);
+
+        response.sendRedirect("../html/main.jsp");
     }
     else if (id == null || id.equals("")){
         check = "1";

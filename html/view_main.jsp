@@ -577,25 +577,6 @@
                     planName.className += ' past_plan'
                 }
 
-                var modifybutton = document.createElement('button')
-                modifybutton.className = 'modify_btn'
-                modifybutton.innerHTML = '🖋️'
-                modifybutton.id = item[2]
-                modifybutton.type = 'button'
-                modifybutton.addEventListener('click', modifyEvent)
-
-                var delbutton = document.createElement('button')
-                delbutton.className = 'delete_btn'
-                delbutton.innerHTML = '🗑️'
-                delbutton.id = item[2]
-                delbutton.type = 'button'
-                delbutton.addEventListener('click', deleteEvent)
-
-                li.appendChild(time)
-                li.appendChild(planName)
-                li.appendChild(modifybutton)
-                li.appendChild(delbutton)
-
                 for (var dateDiv of date){
                     if (dateDiv.innerText.split('\n')[0].slice(0, -1) == day){
                         dateDiv.appendChild(li)

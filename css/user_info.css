@@ -150,8 +150,7 @@ input[type="tel"]:focus{
 
 .sign_up{
     display: inline-block;
-    width:19%;
-    text-align: left;
+    width:30%;
 }
 
 .find_info_box{

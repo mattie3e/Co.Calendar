@@ -52,17 +52,33 @@
                 </select>
             </div>
             <div class="btn_box">
-                <input type="submit" value="FIND ID">
+                <input type="button" onclick="idSearchEvent()" value="FIND ID">
             </div>
             <div class="find_info_box">
                 <div class="sign_up">
+                    <a href="../index.jsp">로그인</a>
                     <a href="sign_up.jsp">회원가입</a>
+                    <a href="find_pw.jsp">비밀번호 찾기</a>
                 </div>
             </div>
         </form>
     </main>
     <footer>copyright ⓒ te_3_3. All rights reserved.</footer>
 
-    <script src="../js/sign_up.js"></script>
+    <script>
+        function idSearchEvent(){
+            var title = "아이디 찾기" ;
+		
+            window.open("", title, 'width=400, height=300') ;
+            
+            var form = document.getElementsByTagName('form')[0]
+            form.target = title
+            form.submit() ;
+        }
+
+        function backLogInEvent(){
+            document.location.href = "../index.jsp"
+        }
+    </script>
 </body>
 </html>

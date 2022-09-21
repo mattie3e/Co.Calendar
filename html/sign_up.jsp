@@ -54,17 +54,17 @@
             </div>
             <div class="input_box">
                 <select name="team" class="input">
-                    <option value="0">개발팀</option>
-                    <option value="1">교육팀</option>
-                    <option value="2">마케팅팀</option>
-                    <option value="3">기타(관리자전용)</option>
+                    <option value="개발팀">개발팀</option>
+                    <option value="교육팀">교육팀</option>
+                    <option value="마케팅팀">마케팅팀</option>
+                    <option value="관리자전용">(관리자전용)</option>
                 </select>
             </div>
             <div class="input_box">
                 <select name="rank" class="input">
-                    <option value="0">사원</option>
-                    <option value="1">팀장</option>
-                    <option value="2">관리자</option>
+                    <option value="사원">사원</option>
+                    <option value="팀장">팀장</option>
+                    <option value="관리자">관리자</option>
                 </select>
             </div>
             </div>
@@ -75,6 +75,8 @@
                 <div class="find_info">
                     <a href="find_id.jsp">아이디 찾기</a>
                     <a href="find_pw.jsp">비밀번호 찾기</a>
+                    <br>
+                    <a href="../index.jsp">로그인</a>
                 </div>
             </div>
         </form>

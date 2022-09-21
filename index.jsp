@@ -8,6 +8,14 @@
 <%
     // 이전 페이지로부터 온 값 인코딩 설정
     request.setCharacterEncoding("utf-8");
+
+    String id = "";
+    
+    id = (String)session.getAttribute("id");
+
+    if (id != null){
+        response.sendRedirect("../html/main.jsp");
+    }
 %>
 
 

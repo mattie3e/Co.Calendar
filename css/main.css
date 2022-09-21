@@ -10,7 +10,7 @@
     border-radius: 8px;
     border: 4px solid transparent;
     background-clip: content-box;
-    background-color: white;
+    background-color: #EEEEEE;
 }
 
 *::-webkit-scrollbar-thumb:hover {
@@ -73,6 +73,7 @@ span{
 }
 
 .pre{
+    z-index: inherit;
     height: 20px;
     background-color: transparent;
     border: none;
@@ -103,16 +104,16 @@ span{
 
 .add{
     font-family: 'Segoe UI', sans-serif;
-    display: flex;
+    display: none;
     font-size: 16px;
     margin-top: 20px;
-    visibility: hidden;
 }
 
 nav{
+    visibility: hidden;
     overflow-y: auto;
     overflow-x: hidden;
-    z-index: 0;
+    z-index: 2;
     opacity: 0;
     position: fixed;
     width: 150px;
@@ -120,15 +121,30 @@ nav{
     background-color: #ffe365;
     box-sizing: border-box;
     margin-top: 50px;
-    visibility: hidden;
     transition: all 0.25s;
 }
+
+/* 메뉴 열면 메인 창 어둡게, 클릭 못 하게 */
+#block_box{
+    /* display: none; */
+    visibility: hidden;
+    z-index: 1000;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    left: 150px;
+    background-color: #222222;
+    opacity: 0;
+    overflow-x: hidden;
+    transition: all 0.25s;
+}
+
 
 .staff_box{
     box-sizing: border-box;
     padding: 15px;
     font-family: 'Segoe UI', sans-serif;
-    width: 200px;
+    width: 150px;
 }
 
 .team{
@@ -141,6 +157,7 @@ nav{
 
 .rank{
     display: inline-block;
+    margin: 0 2px;
     font-size: 12px;
 }
 
@@ -170,7 +187,10 @@ main{
 }
 
 .plan{
+    height: 80vh;
+    overflow-y: scroll;
     box-sizing: border-box;
+    margin-top: 10px;
     font-family: 'Segoe UI', sans-serif;
 }
 
@@ -182,7 +202,12 @@ main{
     border-top: 2px solid #aaaaaa;
 }
 
+.today{
+    border-top: 2px solid #FFE365;
+}
+
 .plan li{
+    display: flex;
     box-sizing: border-box;
     margin: 10px;
 }
@@ -202,7 +227,7 @@ main{
     visibility: visible;
 }
 
-.test{
+.past_plan{
     text-decoration: line-through;
 }
 
@@ -289,7 +314,7 @@ footer{
 }
 
 .add_input_btn{
-    font-size: 14px;
+    font-size: 12px;
     background-color: transparent;
     border: none;
 }
