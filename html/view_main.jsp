@@ -5,6 +5,7 @@
 <%@ page import="java.sql.ResultSet"%>
 <%@ page import="java.util.ArrayList"%>
 <%@ page import="java.time.LocalDateTime"%>
+<%@ page import="java.time.LocalDate"%>
 <%@ page import="java.time.ZoneId"%>
 <%@ page import="java.time.format.DateTimeFormatter"%>
 
@@ -28,12 +29,15 @@
     String currentMonth = "";
     String nextMonth = "";
     String writer = "";
+    String wrtierIdx = "";
+    String writerName = "";
 
     ArrayList<String> teamData = new ArrayList<String>();
 
     ArrayList<String> devTeamData = new ArrayList<String>();
     ArrayList<String> eduTeamData = new ArrayList<String>();
     ArrayList<String> mkTeamData = new ArrayList<String>();
+    ArrayList<String> mngTeamData = new ArrayList<String>();
 
     // 일정 저장 배열
     ArrayList<String> data = new ArrayList<String>();
@@ -44,8 +48,6 @@
         response.sendRedirect("../index.jsp");
     }
     else{
-
-
         ///////////////// 팀원 조회 ////////////////////// 
 
         Class.forName("com.mysql.jdbc.Driver");  // 커넥터를 불러오는 명령어 줄
@@ -55,10 +57,9 @@
 
         ///// 관리자 전용 //////
         if (rank.equals("관리자")){
-            String sql = "SELECT name, rank, team, idx FROM users WHERE id NOT IN (?) AND rank NOT IN (?) ORDER BY team ASC, rank DESC";
+            String sql = "SELECT name, rank, team, idx FROM users WHERE id NOT IN (?) ORDER BY team ASC, rank DESC";
             PreparedStatement query = connect.prepareStatement(sql);
             query.setString(1, id);
-            query.setString(2, rank);
 
             ResultSet result = query.executeQuery();
         
@@ -72,11 +73,14 @@
                 else if (result.getString(3).equals("마케팅팀")){
                     mkTeamData.add("[" + "'" + result.getString(1) + "'" + "," + "'" + result.getString(2) + "'" + "," + "'" + result.getString(3) + "'" + "," + "'" + result.getString(4) + "'" + "]");
                 }
+                else{
+                    mngTeamData.add("[" + "'" + result.getString(1) + "'" + "," + "'" + result.getString(2) + "'" + "," + "'" + result.getString(3) + "'" + "," + "'" + result.getString(4) + "'" + "]");
+                }
             }
         }
         else{
             ///// 그외 //////
-            String sql = "SELECT name, rank, team FROM users WHERE team=? AND id NOT IN (?) ORDER BY team ASC, rank DESC";
+            String sql = "SELECT name, rank, team, idx FROM users WHERE team=? AND id NOT IN (?) ORDER BY team ASC, rank DESC";
             PreparedStatement query = connect.prepareStatement(sql);
             query.setString(1, team);
             query.setString(2, id);
@@ -85,21 +89,37 @@
             ResultSet result = query.executeQuery();
         
             while(result.next()) { 
-                teamData.add("[" +  "'" + result.getString(1) + "'" + "," + "'" + result.getString(2) + "'" + "," + "'" + result.getString(3) + "'" + "]");
+                teamData.add("[" +  "'" + result.getString(1) + "'" + "," + "'" + result.getString(2) + "'" + "," + "'" + result.getString(3) + "'" + "," + "'" + result.getString(4) + "'" + "]");
             }
         }
 
 
         ///////////////// 일정 조회 //////////////////////
         currentMonth = request.getParameter("inquireDateValue");
-        writer = id;
+        wrtierIdx = request.getParameter("idx");
 
+        
+        if (wrtierIdx == null || wrtierIdx.equals("")){
+            response.sendRedirect("main.jsp");
+        }
+        else{
+            String sql = "SELECT id, name FROM users WHERE idx=?";
+            PreparedStatement query = connect.prepareStatement(sql);
+            query.setString(1, wrtierIdx);
+    
+            ResultSet result = query.executeQuery();
+    
+            while(result.next()) {
+                writer = result.getString(1);
+                writerName = result.getString(2);
+            }
+        }
 
         if (currentMonth == null || currentMonth.equals("")){
             LocalDateTime dateTime = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
 
             currentMonth = dateTime.withDayOfMonth(1).format(DateTimeFormatter.ISO_DATE);
-            nextMonth = dateTime.plusMonths(1).withDayOfMonth(1).format(DateTimeFormatter.ISO_DATE);
+            nextMonth = dateTime.plusMonths(1).withDayOfMonth(1).minusDays(1).format(DateTimeFormatter.ISO_DATE) + " 23:59:59";
 
             String sql = "SELECT user_plan, plan_date, idx FROM user_plans WHERE plan_date BETWEEN ? AND ? AND writer=? ORDER BY plan_date ASC";
             PreparedStatement query = connect.prepareStatement(sql);
@@ -118,17 +138,12 @@
         else{
             String[] tmp = currentMonth.split("-");
 
-            if (Integer.parseInt(tmp[1]) + 1 == 13){
-                tmp[0] = Integer.toString(Integer.parseInt(tmp[0]) + 1);
-                tmp[1] = "01";
-            }
-            else{
-                tmp[1] = Integer.toString(Integer.parseInt(tmp[1]) + 1);
-            }
+            currentMonth = tmp[0] + "-" + tmp[1] + "-" + "01";
 
-            nextMonth = tmp[0] + "-" + tmp[1] + "-" + tmp[2];
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");         
+            LocalDate dateTime = LocalDate.parse(currentMonth, formatter);
+            nextMonth = dateTime.plusMonths(1).withDayOfMonth(1).minusDays(1).format(DateTimeFormatter.ISO_DATE) + " 23:59:59";
 
-    
 
             String sql = "SELECT user_plan, plan_date, idx FROM user_plans WHERE plan_date BETWEEN ? AND ? AND writer=? ORDER BY plan_date ASC";
             PreparedStatement query = connect.prepareStatement(sql);
@@ -162,22 +177,32 @@
 </head>
 <body>
     <header>
-        <button type="button" class="menu_icon" onclick="showMenuEvent()">
-            <img src="../img/icons8-menu-30.png" alt="">
-        </button>
-        <div class="user" onclick="backToMainEvent()"><span>🤨</span><%=name%></div>
-
-        <button class="pre" onclick="changeMonthEvent('down')">◀</button>
-        <div class="year"></div>
-        <div class="year">년&nbsp</div>
-        <div class="month"></div>
-        <div class="month">월</div>
-        <button class="next" onclick="changeMonthEvent('up')">▶</button>
-        
-        <button type="button" class="add_btn" onclick="showAddEvent()">🖋️</button>
-        <div class="log_out" onclick="logOutEvent()">LOG OUT</div>
+        <div class="header_item">
+            <button type="button" class="menu_icon" onclick="showMenuEvent()">
+                <img src="../img/icons8-menu-30.png" alt="">
+            </button>
+            <div class="user" onclick="backToMainEvent()"><span>🤨</span><%=name%></div>
+        </div>
+        <div class="header_item">
+            <button class="pre" onclick="changeMonthEvent('down')">◀</button>
+            <div class="year"></div>
+            <div class="year right_space">년</div>
+            <div class="month"></div>
+            <div class="month">월</div>
+            <button class="next" onclick="changeMonthEvent('up')">▶</button>
+        </div>
+        <div class="header_item">
+            <div class="user"><span>🙂</span><%=writerName%><span>조회 중</span></div>
+            <div class="log_out" onclick="logOutEvent()">LOG OUT</div>
+        </div>
     </header>
     <nav>
+        <div class="nav_icon_box">
+            <button type="button" class="menu_icon" onclick="showMenuEvent()">
+                <img src="../img/icons8-menu-30.png" alt="">
+            </button>
+            <div class="user" onclick="backToMainEvent()"><span>🤨</span><%=name%><span><%=rank%></span></div>
+        </div>
         <!-- <div class="staff_box">
             <div class="team">개발팀</div>
             <li class="staff">안태현 <div class="rank">사원</div></li>
@@ -197,12 +222,12 @@
 
     <!-- 메인 -->
     <main>
-        <form class="add" action="../action/save_plan_action.jsp">
+        <!-- <form class="add" action="../action/save_plan_action.jsp">
             <input id="date" name="planDate" type="datetime-local">
             <input type="text" id="add_input" name="planValue" placeholder="일정을 입력해주세요" required>
             <button type="submit" class="add_input_btn">➕</button>
-        </form>
-        <div class="plan">
+        </form> -->
+        <div class="plan view_only">
             <!-- <div class="date">11일</div>
             <li><time datetime="00:00">오전 12시</time> 
                 <div class="date_plan">추석연휴ㅁㄴㅁㅇㄹㅁㄴㄹㄴㅁㄹㅁㄴㄹㅇㄴㅁㄹㅁㄴㄹㄴㅁㅇㄹㄴㄹ</div>
@@ -248,125 +273,6 @@
                 blockBox.style.opacity = '0.3'
             }
         }
-        
-        function showAddEvent(){
-            var add = document.getElementsByClassName('add')[0]
-    
-            if (add.style.display == 'flex'){
-                add.style.display = 'none'
-            }
-            else{
-                add.style.display = 'flex'
-            }
-        }
-        
-        ///////// 수정 삭제 관련 함수 ////////
-        function modifyEvent(){
-            const target = event.target        
-            const textTag = target.previousElementSibling
-            const value = textTag.innerHTML
-
-            var modify = document.createElement('input')
-            modify.type = 'text'
-            modify.value = value
-            modify.className = 'modify_input'
-            modify.style.width = '100%'
-            modify.addEventListener('keydown', function(event) {
-                if (event.keyCode === 13) {
-                  event.preventDefault()
-                  modifyCompleteEvent(modify.value, value, textTag, modify, completeBtn, cancelBtn, target, delBtn)
-                }
-              })
-  
-            
-            textTag.innerHTML = ''
-            textTag.appendChild(modify)
-
-            var completeBtn = document.createElement('button')
-            completeBtn.type = 'button'
-            completeBtn.innerHTML = '✅'
-            completeBtn.className = 'modify_input_btn'
-
-            var cancelBtn = document.createElement('button')
-            cancelBtn.type = 'button'
-            cancelBtn.innerHTML = '❎'
-            cancelBtn.className = 'modify_input_btn'
-
-            textTag.after(cancelBtn)
-            textTag.after(completeBtn)
-
-            var delBtn = target.nextElementSibling
-            target.style.visibility = 'hidden'
-            delBtn.style.visibility = 'hidden'
-
-            completeBtn.addEventListener('click', function(){modifyCompleteEvent(modify.value, value, textTag, modify, completeBtn, cancelBtn, target, delBtn)})
-            cancelBtn.addEventListener('click', function(){modifyCancelEvent(value, textTag, modify, completeBtn, cancelBtn, target, delBtn)})
-        }
-
-        function modifyCompleteEvent(value, oriValue, oriTag, input, completeBtn, cancelBtn, modifyBtn, delBtn){
-            if (value == oriValue || value == ''){
-                modifyCancelEvent(oriValue, oriTag, input, completeBtn, cancelBtn, modifyBtn, delBtn)
-            }
-            else{
-                var confirmValue = confirm("수정하시겠습니까?")
-
-                if (confirmValue == true){
-                    var form = document.createElement('form')
-
-                    var index = document.createElement('input')
-                    index.type = 'hidden'
-                    index.value = modifyBtn.id
-                    index.name = 'indexValue'
-                    
-                    var text = document.createElement('input')
-                    text.type = 'hidden'
-                    text.value = value
-                    text.name = 'textValue'
-                    
-                    form.appendChild(index)
-                    form.appendChild(text)
-                    form.action = '../action/modify_action.jsp'
-                    
-                    document.body.appendChild(form)
-                    form.submit()
-                }
-            }
-        }
-
-        function modifyCancelEvent(oriValue, oriTag, input, completeBtn, cancelBtn, modifyBtn, delBtn){
-            input.remove()
-            completeBtn.remove()
-            cancelBtn.remove()
-            oriTag.innerHTML = oriValue
-
-            modifyBtn.style.removeProperty("visibility")
-            delBtn.style.removeProperty("visibility")
-        }
-
-        function deleteEvent(){
-            var confirmValue = confirm("삭제하시겠습니까?")
-
-            if (confirmValue == true){
-                var form = document.createElement('form')
-
-                var index = document.createElement('input')
-                index.type = 'hidden'
-                index.value = event.target.id
-                index.name = 'indexValue'
-                
-                form.appendChild(index)
-                form.action = '../action/delete_action.jsp'
-                
-                document.body.appendChild(form)
-                form.submit()
-            }
-        }
-
-        //////// 다른 직원 조회 ////////
-        function viewStaffPlanEvent(){
-
-        }
-
 
         //////// 날짜 변경 관련 함수 ////////
         function changeDateEvent(yearValue, monthValue){
@@ -389,8 +295,14 @@
             input.value = date
             input.name = 'inquireDateValue'
 
-            form.acntion = 'main.jsp'
+            var idx = document.createElement('input')
+            idx.type = 'hidden'
+            idx.name = 'idx'
+            idx.value = <%=wrtierIdx%>
+
+            form.appendChild(idx)
             form.appendChild(input)
+            form.action = 'view_main.jsp'
 
             document.body.appendChild(form)
             form.submit()
@@ -430,6 +342,28 @@
             document.location.href = '../action/logout_action.jsp'
         }
 
+        //////// 다른 직원 조회 ////////
+        function viewStaffPlanEvent(rank){
+            const myRank = '<%=rank%>'
+            if (myRank == '관리자' || myRank == '팀장'){
+                var form = document.createElement('form')
+                var idx = document.createElement('input')
+                idx.type = 'hidden'
+                idx.name = 'idx'
+                idx.value = event.target.id
+
+                form.appendChild(idx)
+                form.method = 'POST'
+                form.action = 'view_main.jsp'
+
+                document.body.appendChild(form)
+                form.submit()
+            }
+            else{
+                alert('접근권한이 없습니다.')
+            }
+        }
+
         function makeStaffBox(tmpData){
             var teamData = tmpData
 
@@ -447,11 +381,15 @@
                 staff.className = 'staff'
                 staff.innerHTML = item[0]
                 staff.id = item[3]
-                staff.addEventListener('click', viewStaffPlanEvent)
 
                 var rank = document.createElement('div')
                 rank.className = 'rank'
                 rank.innerHTML = item[1]
+
+                const clickRank = item[1]
+                staff.addEventListener('click', function(){
+                    viewStaffPlanEvent(clickRank)
+                })
 
                 staff.appendChild(rank)
                 staffBox.appendChild(staff)
@@ -461,8 +399,7 @@
         }
 
         function backToMainEvent(){
-            document.location.reload()
-            //document.location.href = 'view_main.jsp'
+            document.location.href = 'main.jsp'
         }
 
         
@@ -473,6 +410,10 @@
             console.log("<%=currentMonth%>")
             console.log("<%=nextMonth%>")
 
+            ///////// user margin 등록 ////////
+            var width = document.getElementsByClassName('user')[1].offsetWidth - 10;
+            document.getElementsByClassName('pre')[0].style.marginLeft = width + 'px';
+
             ///////// logOutEvent 등록 ////////
             document.getElementsByClassName('log_out')[0].addEventListener('click', logOutEvent)
 
@@ -482,10 +423,9 @@
             const today = new Date(Date.now() - offset);
             const todayString = today.toISOString()
 
-            document.getElementById('date').value = todayString.slice(0, 11) + '00:00'
-
             //////// 헤더 가운데 날짜 변경 //////// DB에서 오는 값으로 변경
             var currentDate = "<%=currentMonth%>".split('-')
+            console.log(currentDate)
             changeDateEvent(currentDate[0], currentDate[1])
 
 
@@ -496,8 +436,9 @@
                 var devTeam = <%=devTeamData%>
                 var eduTeam = <%=eduTeamData%>
                 var mkTeam = <%=mkTeamData%>
+                var mngTeam = <%=mngTeamData%>
 
-                var department = [devTeam, eduTeam, mkTeam]
+                var department = [devTeam, eduTeam, mkTeam, mngTeam]
 
                 for (var item of department){
                     makeStaffBox(item)
@@ -511,8 +452,20 @@
             
             //////// 일정, 날짜칸 생성 ////////
             var data = <%=data%>
-    
+            
+            if (data.length == 0){
+                var date = document.createElement('div')
+                date.className = 'date'
+                date.innerHTML = '저장된 일정이 없습니다.'
+
+                document.getElementsByClassName('plan')[0].appendChild(date)
+            }
+
             const todayDate = todayString.slice(8, 10)
+
+            const intTodayDay = parseInt(todayDate)
+            const intTodayYear = parseInt(todayString.slice(0, 5))
+            const intTodayMonth = parseInt(todayString.slice(5, 8))
             const intTodayHour = parseInt(todayString.slice(11, 13))
             const intTodayMin = parseInt(todayString.slice(14, 16))
 
@@ -550,8 +503,14 @@
                 var timeValue = item[1].slice(11, 16)
                 time.datetime = timeValue 
                 
+                var intDay = parseInt(day)
+                var intYear = parseInt(item[1].slice(0,5))
+                var intMonth = parseInt(item[1].slice(5,8))
                 var intHour = parseInt(timeValue.slice(0,2))
                 var intMin = parseInt(timeValue.slice(3,5))
+
+                console.log(intYear, intMonth)
+                console.log(intTodayYear, intTodayMonth)
 
                 if (intHour > 12){
                     time.innerHTML = '오후 ' + intHour + '시 '
@@ -573,9 +532,17 @@
 
                 console.log(item[0])
                 /////// 취소선 추가 ///////
-                if (parseInt(day) < parseInt(todayDate) || (intHour <= intTodayHour && intMin <= intTodayMin)){
+                console.log(intDay)
+                console.log(intTodayDay)
+                if (intYear <= intTodayYear && intMonth < intTodayMonth){
                     planName.className += ' past_plan'
                 }
+                else if (intYear == intTodayYear && intMonth == intTodayMonth && intDay <= intTodayDay && intHour <= intTodayHour && intMin <= intTodayMin){
+                    planName.className += ' past_plan'   
+                }
+
+                li.appendChild(time)
+                li.appendChild(planName)
 
                 for (var dateDiv of date){
                     if (dateDiv.innerText.split('\n')[0].slice(0, -1) == day){
@@ -584,8 +551,13 @@
                 }
             }
             
-            var location = document.getElementsByClassName('today')[0].offsetTop
-            document.getElementsByClassName('plan')[0].scrollTop = location - 150
+            var offsetElement = document.getElementsByClassName('today')[0]
+            var location;
+            if (offsetElement){
+                location = offsetElement.offsetTop
+                document.getElementsByClassName('plan')[0].scrollTop = location - 150
+            }
+            
         }
     </script>
 </body>

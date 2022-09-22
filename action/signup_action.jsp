@@ -25,35 +25,53 @@
     String teamValue = request.getParameter("team");
     String rankValue = request.getParameter("rank");
 
+
+    String[] userInfo = {idValue, pwValue, nameValue, emailValue, phoneValue, teamValue, rankValue};
+
+    for (String info : userInfo){
+        if (info == null || info.equals("")){
+            response.sendRedirect("../index.jsp");
+            return;
+        }
+    }
+    
+    
     Class.forName("com.mysql.jdbc.Driver");  // 커넥터를 불러오는 명령어 줄
 
     // DB 주소, 계정 아이디, 비밀번호 적어주기 mysql포트는 3306 : DB 연결 작업
     Connection connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/calendar", "tae", "1031"); 
 
-    // SQL문 준비 작업
-    String sql = "INSERT INTO users (id, pw, name, email, phone, team, rank, join_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    String sql = "SELECT id FROM users WHERE id=?";
     PreparedStatement query = connect.prepareStatement(sql);
     query.setString(1, idValue);
-    query.setString(2, pwValue);
-    query.setString(3, nameValue);
-    query.setString(4, emailValue);
-    query.setString(5, phoneValue);
-    query.setString(6, teamValue);
-    query.setString(7, rankValue);
-    query.setString(8, joinDate);
 
-    query.executeUpdate();
-    // 값 업데이트 삽입 삭제
+    ResultSet result = query.executeQuery();
+    String tmpId = "";
+ 
+    while(result.next()) {
+        tmpId = result.getString(1);
+    }
+
+    if (tmpId == null || tmpId.equals("")){
+        if (rankValue.equals("관리자") && !teamValue.equals("(관리자전용)")){
+            teamValue = "(관리자전용)";
+        }
+        sql = "INSERT INTO users (id, pw, name, email, phone, team, rank, join_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        query = connect.prepareStatement(sql);
+        query.setString(1, idValue);
+        query.setString(2, pwValue);
+        query.setString(3, nameValue);
+        query.setString(4, emailValue);
+        query.setString(5, phoneValue);
+        query.setString(6, teamValue);
+        query.setString(7, rankValue);
+        query.setString(8, joinDate);
+    
+        query.executeUpdate();
+        
+        response.sendRedirect("../index.jsp");
+    }
+    else{
+        response.sendRedirect("../index.jsp");
+    }
 %>
-
-<head>
-    <title></title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
-<body>
-    <script>
-        document.location.href = '../index.jsp'
-    </script>
-
-</body>

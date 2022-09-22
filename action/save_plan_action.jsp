@@ -13,6 +13,10 @@
 
     String id = "";
 
+    String writeDate = "";
+    String dateValue = "";
+    String textValue = "";
+
     id = (String)session.getAttribute("id");
 
     if (id==null || id.equals("")){
@@ -20,9 +24,9 @@
     }
     else{
         LocalDateTime dateTime = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
-        String writeDate = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(dateTime);
-        String dateValue = request.getParameter("planDate");
-        String textValue = request.getParameter("planValue");
+        writeDate = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(dateTime);
+        dateValue = request.getParameter("planDate");
+        textValue = request.getParameter("planValue");
     
         Class.forName("com.mysql.jdbc.Driver");
     
@@ -36,7 +40,33 @@
         query.setString(4, writeDate);
      
         query.executeUpdate();
-    
-        response.sendRedirect("../html/main.jsp");
     }
 %>
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>
+<body>
+    <script>
+        window.onload = function(){
+            var form = document.createElement('form')
+
+            var input = document.createElement('input')
+            input.type = 'hidden'
+            input.value = '<%=dateValue%>'.slice(0, 10)
+            input.name = 'inquireDateValue'
+
+            form.action = '../html/main.jsp'
+            form.appendChild(input)
+
+            document.body.appendChild(form)
+            form.submit()
+        }
+    </script>
+</body>
+</html>

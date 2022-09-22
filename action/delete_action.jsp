@@ -13,6 +13,8 @@
 
     String id = "";
 
+    String dateValue = "";
+
     id = (String)session.getAttribute("id");
 
     if (id==null || id.equals("")){
@@ -34,3 +36,31 @@
         response.sendRedirect("../html/main.jsp");
     }
 %>
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>
+<body>
+    <script>
+        window.onload = function(){
+            var form = document.createElement('form')
+
+            var input = document.createElement('input')
+            input.type = 'hidden'
+            input.value = '<%=dateValue%>'.slice(0, 10)
+            input.name = 'inquireDateValue'
+            console.log(input.value)
+            form.action = '../html/main.jsp'
+            form.appendChild(input)
+
+            document.body.appendChild(form)
+            form.submit()
+        }
+    </script>
+</body>
+</html>
