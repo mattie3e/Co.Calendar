@@ -185,7 +185,8 @@
             <button type="button" class="menu_icon" onclick="showMenuEvent()">
                 <img src="../img/icons8-menu-30.png" alt="">
             </button>
-            <div class="user" onclick="backToMainEvent()"><span>🤨</span><%=name%><span><%=rank%></span></div>
+            <div class="user" onclick="backToMainEvent()"><span>🤨</span><%=name%></div>
+            <span class="nav_rank"><%=rank%></span>
         </div>
         <!-- <div class="staff_box">
             <div class="team">개발팀</div>
@@ -279,7 +280,6 @@
             modify.type = 'text'
             modify.value = value
             modify.className = 'modify_input'
-            modify.style.width = '100%'
             modify.addEventListener('keydown', function(event) {
                 if (event.keyCode === 13) {
                   event.preventDefault()
@@ -331,9 +331,15 @@
                     text.type = 'hidden'
                     text.value = value
                     text.name = 'textValue'
+
+                    var date = document.createElement('input')
+                    date.type = 'hidden'
+                    date.value = '<%=currentMonth%>'
+                    date.name = 'inquireDateValue'
                     
                     form.appendChild(index)
                     form.appendChild(text)
+                    form.appendChild(date)  
                     form.method = 'POST'
                     form.action = '../action/modify_action.jsp'
                     
@@ -364,6 +370,13 @@
                 index.value = event.target.id
                 index.name = 'indexValue'
                 
+                var date = document.createElement('input')
+                date.type = 'hidden'
+                date.value = '<%=currentMonth%>'
+                date.name = 'inquireDateValue'
+                
+                
+                form.appendChild(date)  
                 form.appendChild(index)
                 form.method = 'POST'
                 form.action = '../action/delete_action.jsp'
@@ -508,6 +521,11 @@
             console.log("<%=currentMonth%>")
             console.log("<%=nextMonth%>")
 
+            ///////// user margin 등록 ////////
+            var width = document.getElementsByClassName('add_btn')[0].offsetWidth - 10;
+            document.getElementsByClassName('pre')[0].style.marginLeft = width + 'px';
+
+
             ///////// logOutEvent 등록 ////////
             document.getElementsByClassName('log_out')[0].addEventListener('click', logOutEvent)
 
@@ -541,11 +559,12 @@
 
             //// 시간 1 ~ 12 ////
             var selectHour = document.createElement('select')
+            selectHour.name = 'hour'
 
             for (var i = 1; i <= 12; i++){
                 var hour = document.createElement('option')
                 hour.value = i
-                hour.innerHTML = i
+                hour.innerHTML = i + '시'
 
                 selectHour.appendChild(hour)
             }
@@ -554,11 +573,14 @@
 
             //// 분 00 ~ 59 ////
             var selectMin = document.createElement('select')
+            selectMin.name = 'min'
 
-            for (var i = 0; i < 60; i++){
+            for (var i = 0; i < 60;){
                 var min = document.createElement('option')
+
                 min.value = i
                 min.innerHTML = i + '분'
+                i += 15
 
                 selectMin.appendChild(min)
             }

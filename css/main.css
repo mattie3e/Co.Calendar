@@ -57,7 +57,7 @@ img{
 }
 
 span{
-    margin: 0 5px;
+    margin: 0 2px;
     font-size: 14px;
 }
 
@@ -109,8 +109,30 @@ span{
 .add{
     font-family: 'Segoe UI', sans-serif;
     display: none;
+    justify-content: center;
     font-size: 16px;
     margin-top: 20px;
+}
+
+#add_input{
+    border:none;
+    border-bottom: 1px solid #333333;
+    width: 50%;
+}
+
+#date{
+    font-family: 'Segoe UI', sans-serif;
+    padding: 2px;
+    margin: 0 2px;
+    border: none;
+    border-right: 1px solid #333333;
+}
+
+select{
+    font-family: 'Segoe UI', sans-serif;
+    padding: 2px;
+    margin: 0 2px;
+    border: none;
 }
 
 nav{
@@ -145,6 +167,17 @@ nav{
     position: relative;
 }
 
+.nav_rank{
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.nav_view_box{
+    display: none;
+    margin-left: 15px;
+}
+
 /* 메뉴 열면 메인 창 어둡게, 클릭 못 하게 */
 #block_box{
     /* display: none; */
@@ -159,7 +192,6 @@ nav{
     overflow-x: hidden;
     transition: all 0.25s;
 }
-
 
 .staff_box{
     box-sizing: border-box;
@@ -316,10 +348,6 @@ input[type="button"]:focus{
     opacity: 50%;
 }
 
-input[type="text"]{
-    width: 50%;
-}
-
 input[type="text"]:focus{
     outline: none;
 }
@@ -368,6 +396,7 @@ footer{
 }
 
 
+
 @media screen and (max-width:1440px) {
     main{
         width: 100%;
@@ -387,19 +416,44 @@ footer{
         width: 100%;
         min-width: 100%;
     }
+
+    
+    input[type="date"]{
+        width: 18px;
+        overflow: initial;
+    }
 }
 
-@media screen and (max-width:480px) {
+@media screen and (max-width:480px) {    
+    html{
+        font-size: 14px;
+    }
+
     main{
         width: 100%
     }
+    
     .add_btn{
-        font-size: 14px;
+        font-size: 12px;
     }
+
+    .nav_view_box{
+        display: flex;
+    }
+
+    span{
+        display: none;
+    }
+
+    .date_plan{
+        width: 200px;
+    }
+
     .log_out{
         margin: 0 5px 0 0;
-        font-size: 14px;
+        font-size: 12px;
     }
+
     .menu_icon{
         margin-right: 0;
     }
@@ -408,12 +462,25 @@ footer{
         padding-left: 0;
     }
 
+    .nav_rank{
+        display: block;
+    }
+    
+    .header_item{
+        font-size: 14px;
+    }
+
+    header .user{
+        display: none;
+        font-size: 14px;
+    }
+
     .add{
         margin: 10px 0 5px 0;
     }
 
-    input[type="text"]{
-        width: fit-content;
+    #add_input{
+        width: 100px;
     }
 
     .modify_btn{
@@ -421,6 +488,10 @@ footer{
     }
 
     .delete_btn{
+        font-size: 12px;
+    }
+
+    .modify_input_btn{
         font-size: 12px;
     }
 }

@@ -21,6 +21,8 @@
         response.sendRedirect("../index.jsp");
     }
     else{
+        dateValue = request.getParameter("inquireDateValue");
+
         LocalDateTime dateTime = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
         String modifyDate = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(dateTime);
         String idxValue = request.getParameter("indexValue");
@@ -38,8 +40,6 @@
         query.setString(3, idxValue);
      
         query.executeUpdate();
-    
-        response.sendRedirect("../html/main.jsp");
     }
 %>
 
@@ -58,9 +58,10 @@
 
             var input = document.createElement('input')
             input.type = 'hidden'
-            input.value = '<%=dateValue%>'.slice(0, 10)
+            input.value = '<%=dateValue%>'
             input.name = 'inquireDateValue'
             console.log(input.value)
+
             form.action = '../html/main.jsp'
             form.appendChild(input)
 

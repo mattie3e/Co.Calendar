@@ -192,7 +192,7 @@
             <button class="next" onclick="changeMonthEvent('up')">▶</button>
         </div>
         <div class="header_item">
-            <div class="user"><span>🙂</span><%=writerName%><span>조회 중</span></div>
+            <div class="user"><span>🙂</span><%=writerName%><span><%=rank%></span><span>조회 중</span></div>
             <div class="log_out" onclick="logOutEvent()">LOG OUT</div>
         </div>
     </header>
@@ -201,7 +201,13 @@
             <button type="button" class="menu_icon" onclick="showMenuEvent()">
                 <img src="../img/icons8-menu-30.png" alt="">
             </button>
-            <div class="user" onclick="backToMainEvent()"><span>🤨</span><%=name%><span><%=rank%></span></div>
+            <div class="user" onclick="backToMainEvent()"><span>🤨</span><%=name%></div>
+            <span class="nav_rank"><%=rank%></span>
+        </div>
+        <div class="nav_view_box">
+            <div class="nav_rank"><%=writerName%></div>
+            <span class="nav_rank"><%=rank%></span>
+            <span class="nav_rank">조회 중</span>
         </div>
         <!-- <div class="staff_box">
             <div class="team">개발팀</div>
@@ -530,7 +536,6 @@
                 planName.className = 'date_plan'
                 planName.innerHTML = item[0]
 
-                console.log(item[0])
                 /////// 취소선 추가 ///////
                 console.log(intDay)
                 console.log(intTodayDay)

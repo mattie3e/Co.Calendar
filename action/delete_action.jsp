@@ -22,6 +22,7 @@
     }
     else{
         String idxValue = request.getParameter("indexValue");
+        dateValue = request.getParameter("inquireDateValue");
     
         Class.forName("com.mysql.jdbc.Driver");
     
@@ -32,8 +33,6 @@
         query.setString(1, idxValue);
      
         query.executeUpdate();
-    
-        response.sendRedirect("../html/main.jsp");
     }
 %>
 
@@ -52,9 +51,9 @@
 
             var input = document.createElement('input')
             input.type = 'hidden'
-            input.value = '<%=dateValue%>'.slice(0, 10)
+            input.value = '<%=dateValue%>'
             input.name = 'inquireDateValue'
-            console.log(input.value)
+
             form.action = '../html/main.jsp'
             form.appendChild(input)
 

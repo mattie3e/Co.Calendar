@@ -15,6 +15,12 @@
 
     String writeDate = "";
     String dateValue = "";
+
+    String ymd = "";
+    String amPm = "";
+    String hour = "";
+    String min = "";
+
     String textValue = "";
 
     id = (String)session.getAttribute("id");
@@ -25,7 +31,26 @@
     else{
         LocalDateTime dateTime = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
         writeDate = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(dateTime);
-        dateValue = request.getParameter("planDate");
+        
+        ymd = request.getParameter("planDate");
+        amPm = request.getParameter("amPm");
+        hour = request.getParameter("hour");
+        min = request.getParameter("min");
+        
+        if (amPm.equals("오전") && hour.equals("12")){
+            dateValue = ymd + " 00:" + min;
+        }
+        else if (amPm.equals("오전")){
+            dateValue = ymd + " " + hour + ":" + min;
+        }
+        else if (amPm.equals("오후") && hour.equals("12")){
+            dateValue = ymd + " " + hour + ":" + min;
+        }
+        else if (amPm.equals("오후")){
+            dateValue = ymd + " " + Integer.toString(Integer.parseInt(hour)+12) + ":" + min;
+        }
+        
+
         textValue = request.getParameter("planValue");
     
         Class.forName("com.mysql.jdbc.Driver");
