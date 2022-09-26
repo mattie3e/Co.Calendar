@@ -75,7 +75,7 @@
                 }
                 else{
                     mngTeamData.add("[" + "'" + result.getString(1) + "'" + "," + "'" + result.getString(2) + "'" + "," + "'" + result.getString(3) + "'" + "," + "'" + result.getString(4) + "'" + "]");
-                }
+                } 
             }
         }
         else{
@@ -375,7 +375,7 @@
                 date.value = '<%=currentMonth%>'
                 date.name = 'inquireDateValue'
                 
-                
+
                 form.appendChild(date)  
                 form.appendChild(index)
                 form.method = 'POST'

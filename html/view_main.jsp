@@ -31,6 +31,7 @@
     String writer = "";
     String wrtierIdx = "";
     String writerName = "";
+    String writerRank = "";
 
     ArrayList<String> teamData = new ArrayList<String>();
 
@@ -103,7 +104,7 @@
             response.sendRedirect("main.jsp");
         }
         else{
-            String sql = "SELECT id, name FROM users WHERE idx=?";
+            String sql = "SELECT id, name, rank FROM users WHERE idx=?";
             PreparedStatement query = connect.prepareStatement(sql);
             query.setString(1, wrtierIdx);
     
@@ -112,6 +113,7 @@
             while(result.next()) {
                 writer = result.getString(1);
                 writerName = result.getString(2);
+                writerRank = result.getString(3);
             }
         }
 
@@ -192,7 +194,7 @@
             <button class="next" onclick="changeMonthEvent('up')">▶</button>
         </div>
         <div class="header_item">
-            <div class="user"><span>🙂</span><%=writerName%><span><%=rank%></span><span>조회 중</span></div>
+            <div class="user"><span>🙂</span><%=writerName%><span><%=writerRank%></span><span>조회 중</span></div>
             <div class="log_out" onclick="logOutEvent()">LOG OUT</div>
         </div>
     </header>
@@ -206,7 +208,7 @@
         </div>
         <div class="nav_view_box">
             <div class="nav_rank"><%=writerName%></div>
-            <span class="nav_rank"><%=rank%></span>
+            <span class="nav_rank"><%=writerRank%></span>
             <span class="nav_rank">조회 중</span>
         </div>
         <!-- <div class="staff_box">

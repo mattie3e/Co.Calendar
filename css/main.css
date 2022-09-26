@@ -424,6 +424,25 @@ footer{
     }
 }
 
+@media screen and (max-width:601px) {
+    header .user{
+        display: none;
+        font-size: 14px;
+    }
+
+    .nav_view_box{
+        display: flex;
+    }
+
+    span{
+        display: none;
+    }
+
+    .nav_rank{
+        display: block;
+    }
+}
+
 @media screen and (max-width:480px) {    
     html{
         font-size: 14px;
