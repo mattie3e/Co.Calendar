@@ -387,8 +387,8 @@
         }
 
 
-        //////// 날짜 변경 관련 함수 ////////
-        function changeDateEvent(yearValue, monthValue){
+        //////// 월 변경 관련 함수 ////////
+        function changeDateEvent(yearValue, monthValue){ // set 하고 event 빼기
             var month = document.getElementsByClassName('month')[0]
             var year = document.getElementsByClassName('year')[0]
 
@@ -396,7 +396,7 @@
             month.innerHTML = monthValue
         }
 
-        function monthSubmitEvent(year, month){
+        function monthSubmitEvent(year, month){ // 얘도 event 빼기
             console.log(month)
             if (String(month).length == 1){
                 month = '0' + month
@@ -443,12 +443,10 @@
         }
 
         function logOutEvent(){
-            <%
                 //session.invalidate();
                 //response.sendRedirect("../index.jsp");
                 //왜 위에껄로 하면 버튼 안눌러도 로그아웃댐???? 새로고침하면 왜 로그아웃댐?????
                 // if문을 안써줬다~~
-            %>
             document.location.href = '../action/logout_action.jsp'
         }
 

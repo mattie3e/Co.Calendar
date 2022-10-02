@@ -34,7 +34,7 @@
                 <button type="button" onclick="idSearchEvent()"><img src="../img/icons8-tiktok-verified-account-64.png" alt="비밀번호 확인"></button>
             </div>
             <div class="input_box">
-                <input name="pw" type="password" class="input" placeholder="비밀번호를 입력해주세요." required>
+                <input name="pw" type="password" class="input" placeholder="비밀번호를 입력해주세요." onblur="checkPwEvent()" required>
                 <button type="button" onclick="showPwEvent(1)"><img src="../img/icons8-명백한-30.png" alt="비밀번호 확인"></button>
             </div>
             <div class="input_box">
