@@ -511,33 +511,18 @@
             //document.location.href = 'view_main.jsp'
         }
 
-        
-
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        window.onload = function(){
-            console.log(<%=data%>)
-            console.log("<%=currentMonth%>")
-            console.log("<%=nextMonth%>")
-
-            ///////// user margin 등록 ////////
-            var width = document.getElementsByClassName('add_btn')[0].offsetWidth - 10;
-            document.getElementsByClassName('pre')[0].style.marginLeft = width + 'px';
-
-
-            ///////// logOutEvent 등록 ////////
-            document.getElementsByClassName('log_out')[0].addEventListener('click', logOutEvent)
-
-
-            ////////// 오늘 날짜로 input 기본값 세팅 ////////
+        function setDefaultInput(){
             const offset = new Date().getTimezoneOffset() * 60000;
             const today = new Date(Date.now() - offset);
             const todayString = today.toISOString()
 
             var selectDate = document.getElementById('date')
             selectDate.value = todayString.slice(0, 10)
-            
 
-            //////// time select box 만들기 ////////
+            makeTimeSelector(selectDate)    /////////////////// 생성하면서 Element 전달
+        }
+
+        function makeTimeSelector(selectDate){
             //// 오전 오후 ////
             var amPm = document.createElement('select')
             amPm.name = 'amPm'
@@ -584,38 +569,10 @@
             }
 
             selectHour.after(selectMin)
+        }
 
-
-
-            //////// 헤더 가운데 날짜 변경 //////// DB에서 오는 값으로 변경
-            var currentDate = "<%=currentMonth%>".split('-')
-            console.log(currentDate)
-            changeDateEvent(currentDate[0], currentDate[1])
-
-
-            //////// nav 팀명, 팀원명 ////////
-            /// 관리자 ///
-            if ('<%=rank%>' == '관리자'){
-                // 팀별로 나누기
-                var devTeam = <%=devTeamData%>
-                var eduTeam = <%=eduTeamData%>
-                var mkTeam = <%=mkTeamData%>
-                var mngTeam = <%=mngTeamData%>
-
-                var department = [devTeam, eduTeam, mkTeam, mngTeam]
-
-                for (var item of department){
-                    makeStaffBox(item)
-                }
-            }
-            else{
-                var teamData = <%=teamData%>
-                makeStaffBox(teamData)
-            }
-
-            
-            //////// 일정, 날짜칸 생성 ////////
-            var data = <%=data%>
+        function makePlanBox(Data){
+            var data = Data
             
             if (data.length == 0){
                 var date = document.createElement('div')
@@ -624,6 +581,11 @@
 
                 document.getElementsByClassName('plan')[0].appendChild(date)
             }
+
+            // 오늘 날짜
+            const offset = new Date().getTimezoneOffset() * 60000;
+            const today = new Date(Date.now() - offset);
+            const todayString = today.toISOString()
 
             const todayDate = todayString.slice(8, 10)
 
@@ -736,7 +698,63 @@
                     }
                 }
             }
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        window.onload = function(){
+            console.log(<%=data%>)
+            console.log("<%=currentMonth%>")
+            console.log("<%=nextMonth%>")
+
+            ///////// user margin 등록 ////////
+            var width = document.getElementsByClassName('add_btn')[0].offsetWidth - 10;
+            document.getElementsByClassName('pre')[0].style.marginLeft = width + 'px';
+
+
+            ///////// logOutEvent 등록 ////////
+            document.getElementsByClassName('log_out')[0].addEventListener('click', logOutEvent)
+
+
+            ////////// 오늘 날짜로 input 기본값 세팅 ////////
+            setDefaultInput()
             
+
+            //////// time select box 만들기 ////////
+            //makeTimeSelector() //setDefaultInput()에서 호출함
+
+
+            //////// 헤더 가운데 날짜 변경 //////// DB에서 오는 값으로 변경
+            var currentDate = "<%=currentMonth%>".split('-')
+            console.log(currentDate)
+            changeDateEvent(currentDate[0], currentDate[1])
+
+
+            //////// nav 팀명, 팀원명 ////////
+            /// 관리자 ///
+            if ('<%=rank%>' == '관리자'){
+                // 팀별로 나누기
+                var devTeam = <%=devTeamData%>
+                var eduTeam = <%=eduTeamData%>
+                var mkTeam = <%=mkTeamData%>
+                var mngTeam = <%=mngTeamData%>
+
+                var department = [devTeam, eduTeam, mkTeam, mngTeam]
+
+                for (var item of department){
+                    makeStaffBox(item)
+                }
+            }
+            else{
+                var teamData = <%=teamData%>
+                makeStaffBox(teamData)
+            }
+
+            
+            //////// 일정, 날짜칸 생성 ////////
+            makePlanBox(<%=data%>)
+            
+            
+            //////// 스크롤 오늘 일정으로 ////////
             var offsetElement = document.getElementsByClassName('today')[0]
             var location;
             if (offsetElement){
